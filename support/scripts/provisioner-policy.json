@@ -11,7 +11,7 @@
             ],
             "Resource": [
                 "arn:aws:s3:::event-logger-terraform-state",
-                "arn:aws:s3:::event-logger-terraform-state/env/dev/*"
+                "arn:aws:s3:::event-logger-terraform-state/*"
             ]
         },
         {
@@ -182,7 +182,9 @@
                 "lambda:Get*",
                 "lambda:List*",
                 "lambda:PublishVersion",
-                "lambda:CreateAlias"
+                "lambda:CreateAlias",
+                "lambda:UpdateAlias",
+                "lambda:UpdateFunctionCode"
             ],
             "Resource": "arn:aws:lambda:ap-southeast-1:297416720645:function:*"
         },
