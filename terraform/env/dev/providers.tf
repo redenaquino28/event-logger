@@ -21,7 +21,7 @@ terraform {
 }
 
 provider "aws" {
-    region = "ap-southeast-1"
+    region = var.region
 
     assume_role {
       role_arn = "arn:aws:iam::297416720645:role/event-logger-provisioner-role"
