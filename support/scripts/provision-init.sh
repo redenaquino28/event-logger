@@ -4,27 +4,13 @@ set -ex
 # === Config ===
 PROJECT_NAME="event-logger"
 ROLE_NAME="$PROJECT_NAME-provisioner-role"
+GITHUB_OIDC_ROLE_NAME="$PROJECT_NAME-github-pipeline-role"
 POLICY_NAME="$PROJECT_NAME-provisioner-policy"
 S3_BUCKET="$PROJECT_NAME-terraform-tfstate"
 DYNAMO_TABLE="$PROJECT_NAME-terraform-tfstate-locks"
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 REGION="ap-southeast-1"
 
-# Create or update provisioner role
-cat > trust-policy.json <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::$ACCOUNT_ID:user/reden.aquino"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
 
 if aws iam get-role --role-name "$ROLE_NAME" >/dev/null 2>&1; then
   echo "Updating IAM Role trust policy: $ROLE_NAME"
@@ -71,6 +57,20 @@ else
   echo "Policy already attached to role: $ROLE_NAME"
 fi
 
+# Create IAM Role for Github OIDC
+if aws iam get-role --role-name "$GITHUB_OIDC_ROLE_NAME" >/dev/null 2>&1; then
+  echo "Updating IAM Role Github trust policy: $GITHUB_OIDC_ROLE_NAME"
+  aws iam update-assume-role-policy \
+    --role-name "$GITHUB_OIDC_ROLE_NAME" \
+    --policy-document file://github-oidc-trust-policy.json
+else
+  echo "Creating IAM Role: $GITHUB_OIDC_ROLE_NAME"
+  aws iam create-role \
+    --role-name "$GITHUB_OIDC_ROLE_NAME" \
+    --assume-role-policy-document file://github-oidc-trust-policy.json
+fi
+
 echo "-- DONE --"
-echo "Role: $ROLE_NAME"
-echo "Policy: $POLICY_ARN"
+echo "Provisioner Role: $ROLE_NAME"
+echo "Github OIDC Role: $GITHUB_OIDC_ROLE_NAME"
+echo "Provisioner Policy: $POLICY_ARN"
