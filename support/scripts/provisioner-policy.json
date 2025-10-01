@@ -22,6 +22,75 @@
                 "dynamodb:DeleteItem"
             ],
             "Resource": "arn:aws:dynamodb:ap-southeast-1:297416720645:table/event-logger-terraform-state-locks"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:CreateTable",
+                "dynamodb:TagResource"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-southeast-1:297416720645:table/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:RequestTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:DeleteTable"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-southeast-1:297416720645:table/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:ResourceTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:Describe*",
+                "dynamodb:ListTagsOfResource"
+            ],
+            "Resource": "arn:aws:dynamodb:ap-southeast-1:297416720645:table/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:CreateRepository",
+                "ecr:TagResource"
+            ],
+            "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:RequestTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:DeleteRepository",
+                "ecr:DeleteLifecyclePolicy",
+                "ecr:PutLifecyclePolicy"
+            ],
+            "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:ResourceTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:Describe*",
+                "ecr:Get*",
+                "ecr:ListTagsForResource"
+            ],
+            "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/*"
         }
     ]
 }

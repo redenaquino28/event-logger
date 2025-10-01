@@ -9,6 +9,12 @@ variable "region" {
     default = "ap-southeast-1"
 }
 
+variable "environment" {
+    description = "Name of environment where project will be provisioned"
+    type = string
+    default = "dev"
+}
+
 variable "region_code" {
     description = "Region short code of AWS region"
     type = map(string)
