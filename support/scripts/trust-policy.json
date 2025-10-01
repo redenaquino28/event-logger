@@ -4,7 +4,10 @@
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::297416720645:user/reden.aquino"
+        "AWS": [
+          "arn:aws:iam::297416720645:user/reden.aquino",
+          "arn:aws:iam::297416720645:role/event-logger-github-pipeline-role"
+        ]
       },
       "Action": "sts:AssumeRole"
     }
