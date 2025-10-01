@@ -11,7 +11,7 @@
             ],
             "Resource": [
                 "arn:aws:s3:::event-logger-terraform-state",
-                "arn:aws:s3:::event-logger-terraform-state/env/dev/*"
+                "arn:aws:s3:::event-logger-terraform-state/*"
             ]
         },
         {
@@ -130,7 +130,9 @@
             "Effect": "Allow",
             "Action": [
                 "iam:DeleteRole",
-                "iam:AttachRolePolicy"
+                "iam:DeleteRolePolicy",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy"
             ],
             "Resource": "arn:aws:iam::297416720645:role/*",
             "Condition": {
@@ -142,7 +144,7 @@
         {
             "Effect": "Allow",
             "Action": [
-                "iam:GetRole",
+                "iam:Get*",
                 "iam:List*"
             ],
             "Resource": "arn:aws:iam::297416720645:role/*"
@@ -164,6 +166,7 @@
             "Effect": "Allow",
             "Action": [
                 "lambda:DeleteFunction",
+                "lambda:DeleteAlias",
                 "lambda:InvokeFunction"
             ],
             "Resource": "arn:aws:lambda:ap-southeast-1:297416720645:function:*",
@@ -176,8 +179,12 @@
         {
             "Effect": "Allow",
             "Action": [
-                "lambda:GetFunction",
-                "lambda:List*"
+                "lambda:Get*",
+                "lambda:List*",
+                "lambda:PublishVersion",
+                "lambda:CreateAlias",
+                "lambda:UpdateAlias",
+                "lambda:UpdateFunctionCode"
             ],
             "Resource": "arn:aws:lambda:ap-southeast-1:297416720645:function:*"
         },

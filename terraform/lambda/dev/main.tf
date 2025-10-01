@@ -30,12 +30,50 @@ resource "aws_iam_role_policy_attachment" "lambda_ecr_access" {
 resource "aws_lambda_function" "event_logger" {
   function_name = "${local.prefix}-api"
 
-  role          = aws_iam_role.lambda_execution_role.arn
-  package_type  = "Image"
-  image_uri     = "${var.ecr_repository_uri}:${var.image_tag}"
+  role         = aws_iam_role.lambda_execution_role.arn
+  package_type = "Image"
+  image_uri    = "${var.ecr_repository_uri}:${var.image_tag}"
 
-  memory_size   = 128
-  timeout       = 15
+  publish = true
+
+  memory_size = 128
+  timeout     = 15
 
   tags = local.required_tags
+}
+
+resource "aws_lambda_alias" "event_logger" {
+  name             = "${local.prefix}-alias"
+  function_name    = aws_lambda_function.event_logger.function_name
+  function_version = aws_lambda_function.event_logger.version
+}
+
+resource "aws_iam_role_policy" "lambda_policy" {
+  name = "${local.prefix}-lambda-execution-policy"
+  role = aws_iam_role.lambda_execution_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
