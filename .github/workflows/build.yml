@@ -20,4 +20,4 @@ jobs:
         run: |
           docker run -d -p 8000:8000 --name event-logger-api event-logger-api:latest
           sleep 5
-          curl --fail http://localhost:8000/healthcheck || (docker logs event-logger-api && exit 1)
+          curl --fail http://localhost:8000/api/healthcheck || (docker logs event-logger-api && exit 1)
