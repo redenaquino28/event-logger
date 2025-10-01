@@ -20,6 +20,11 @@ jobs:
       - name: Checkout Event Logger Repository
         uses: actions/checkout@v4
 
+      - name: Set short commit hash
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "IMAGE_TAG=$SHORT_SHA" >> $GITHUB_ENV
+
       - name: Build Docker image for Event Logger API
         run: |
           docker build -t $IMAGE_NAME:$IMAGE_TAG -f application/Dockerfile .
