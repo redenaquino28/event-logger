@@ -57,6 +57,20 @@ else
   echo "Policy already attached to role: $ROLE_NAME"
 fi
 
+# Create OIDC provider in AWS
+OIDC_ARN="arn:aws:iam::$ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com"
+
+if aws iam list-open-id-connect-providers --query "OpenIDConnectProviderList[].Arn" --output text | grep -q "$OIDC_ARN"; then
+  echo "OIDC provider already exists."
+else
+  echo "Creating OIDC provider..."
+  aws iam create-open-id-connect-provider \
+    --url https://token.actions.githubusercontent.com \
+    --client-id-list sts.amazonaws.com \
+    --thumbprint-list a031c46782e6e6c662c2c87c76da9aa62ccabd8e
+  echo "OIDC provider created."
+fi
+
 # Create IAM Role for Github OIDC
 if aws iam get-role --role-name "$GITHUB_OIDC_ROLE_NAME" >/dev/null 2>&1; then
   echo "Updating IAM Role Github trust policy: $GITHUB_OIDC_ROLE_NAME"
