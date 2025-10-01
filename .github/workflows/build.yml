@@ -10,7 +10,7 @@ jobs:
     env:
       REGION: ap-southeast-1
       ACCOUNT_ID: 297416720645
-      IMAGE_NAME: event-logger-api
+      IMAGE_NAME: event-logger
       IMAGE_TAG: latest
     permissions:
       id-token: write 
