@@ -42,7 +42,7 @@ else
     --output text)
 fi
 
-# Check if policy already attached
+# Check if policy already attached in provisoner role
 ATTACHED=$(aws iam list-attached-role-policies \
   --role-name "$ROLE_NAME" \
   --query "AttachedPolicies[?PolicyArn=='${POLICY_ARN}'] | length(@)" \
@@ -82,6 +82,21 @@ else
   aws iam create-role \
     --role-name "$GITHUB_OIDC_ROLE_NAME" \
     --assume-role-policy-document file://github-oidc-trust-policy.json
+fi
+
+# Check if policy already attached in Github OIDC role
+ATTACHED=$(aws iam list-attached-role-policies \
+  --role-name "$GITHUB_OIDC_ROLE_NAME" \
+  --query "AttachedPolicies[?PolicyArn=='${POLICY_ARN}'] | length(@)" \
+  --output text)
+
+if [ "$ATTACHED" -eq 0 ]; then
+  echo "Attaching Policy to Role"
+  aws iam attach-role-policy \
+    --role-name "$GITHUB_OIDC_ROLE_NAME" \
+    --policy-arn "$POLICY_ARN"
+else
+  echo "Policy already attached to role: $GITHUB_OIDC_ROLE_NAME"
 fi
 
 echo "-- DONE --"
