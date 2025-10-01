@@ -91,6 +91,26 @@
                 "ecr:ListTagsForResource"
             ],
             "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:CompleteLayerUpload",
+                "ecr:DescribeRepositories",
+                "ecr:DescribeImages",
+                "ecr:InitiateLayerUpload",
+                "ecr:PutImage",
+                "ecr:UploadLayerPart"
+            ],
+            "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/event-logger"
         }
     ]
 }

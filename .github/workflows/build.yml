@@ -12,18 +12,21 @@ jobs:
       ACCOUNT_ID: 297416720645
       IMAGE_NAME: event-logger-api
       IMAGE_TAG: latest
-
+    permissions:
+      id-token: write 
+      contents: read
+      
     steps:
       - name: Checkout Event Logger Repository
         uses: actions/checkout@v4
 
       - name: Build Docker image for Event Logger API
         run: |
-          docker build -t $IMAGE_NAME:IMAGE_TAG -f application/Dockerfile .
+          docker build -t $IMAGE_NAME:$IMAGE_TAG -f application/Dockerfile .
   
       - name: Run container and test
         run: |
-          docker run -d -p 8000:8000 --name event-logger-api event-logger-api:latest
+          docker run -d -p 8000:8000 --name $IMAGE_NAME $IMAGE_NAME:$IMAGE_TAG
           sleep 5
           curl --fail http://localhost:8000/api/healthcheck || (docker logs event-logger-api && exit 1)
 
