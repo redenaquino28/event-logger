@@ -46,3 +46,29 @@ resource "aws_ecr_lifecycle_policy" "keep_recent" {
     ]
   })
 }
+
+resource "aws_ecr_repository_policy" "allow_github_oidc_role" {
+  repository = aws_ecr_repository.event_logger.name
+
+  policy = jsonencode({
+    Version = "2008-10-17"
+    Statement = [
+      {
+        Sid = "AllowPushPullForGitHubOIDCRole"
+        Effect = "Allow"
+        Principal = {
+          AWS = data.aws_iam_role.github_oidc_role.arn
+        }
+        Action = [
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:CompleteLayerUpload",
+            "ecr:DescribeRepositories",
+            "ecr:DescribeImages",
+            "ecr:InitiateLayerUpload",
+            "ecr:PutImage",
+            "ecr:UploadLayerPart"
+        ]
+      }
+    ]
+  })
+}

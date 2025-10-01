@@ -74,7 +74,8 @@
             "Action": [
                 "ecr:DeleteRepository",
                 "ecr:DeleteLifecyclePolicy",
-                "ecr:PutLifecyclePolicy"
+                "ecr:PutLifecyclePolicy",
+                "ecr:SetRepositoryPolicy"
             ],
             "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/*",
             "Condition": {
@@ -95,7 +96,8 @@
         {
             "Effect": "Allow",
             "Action": [
-                "ecr:GetAuthorizationToken"
+                "ecr:GetAuthorizationToken",
+                "iam:GetRole"
             ],
             "Resource": "*"
         },
