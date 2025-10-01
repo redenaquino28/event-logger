@@ -1,0 +1,23 @@
+name: Build Docker Image for Event Logger API
+
+on:
+  push:
+    branches: [ "feat/workflow" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Event Logger Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for Event Logger API
+        run: |
+          docker build -t event-logger-api:latest -f application/Dockerfile .
+  
+      - name: Run container and test
+        run: |
+          docker run -d -p 8000:8000 --name event-logger-api event-logger-api:latest
+          sleep 5
+          curl --fail http://localhost:8000/events || (docker logs event-logger-api && exit 1)
