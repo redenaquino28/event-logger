@@ -1,8 +1,7 @@
 name: Test GitHub OIDC Role
 
 on:
-  push:
-    branches: [ "feat/workflow" ]
+  workflow_dispatch:
 
 jobs:
   test-oidc:

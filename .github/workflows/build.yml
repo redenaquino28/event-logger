@@ -2,7 +2,7 @@ name: Build Docker Image for Event Logger API
 
 on:
   push:
-    branches: [ "feat/workflow" ]
+    branches: [ "main" ]
 
 jobs:
   build:
