@@ -80,5 +80,4 @@ jobs:
           cd terraform/lambda/dev
           terraform init
           terraform validate
-          terraform fmt
           terraform apply -var="image_tag=$IMAGE_TAG" -auto-approve

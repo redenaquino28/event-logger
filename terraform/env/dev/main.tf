@@ -35,8 +35,8 @@ resource "aws_ecr_lifecycle_policy" "keep_recent" {
         rulePriority = 1
         description  = "Keep only last 3 images"
         selection = {
-          tagStatus = "any"
-          countType = "imageCountMoreThan"
+          tagStatus   = "any"
+          countType   = "imageCountMoreThan"
           countNumber = 3
         }
         action = {
@@ -54,19 +54,19 @@ resource "aws_ecr_repository_policy" "allow_github_oidc_role" {
     Version = "2008-10-17"
     Statement = [
       {
-        Sid = "AllowPushPullForGitHubOIDCRole"
+        Sid    = "AllowPushPullForGitHubOIDCRole"
         Effect = "Allow"
         Principal = {
           AWS = data.aws_iam_role.github_oidc_role.arn
         }
         Action = [
-            "ecr:BatchCheckLayerAvailability",
-            "ecr:CompleteLayerUpload",
-            "ecr:DescribeRepositories",
-            "ecr:DescribeImages",
-            "ecr:InitiateLayerUpload",
-            "ecr:PutImage",
-            "ecr:UploadLayerPart"
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:CompleteLayerUpload",
+          "ecr:DescribeRepositories",
+          "ecr:DescribeImages",
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart"
         ]
       }
     ]
