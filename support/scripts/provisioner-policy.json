@@ -74,7 +74,8 @@
             "Action": [
                 "ecr:DeleteRepository",
                 "ecr:DeleteLifecyclePolicy",
-                "ecr:PutLifecyclePolicy"
+                "ecr:PutLifecyclePolicy",
+                "ecr:SetRepositoryPolicy"
             ],
             "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/*",
             "Condition": {
@@ -111,6 +112,81 @@
                 "ecr:UploadLayerPart"
             ],
             "Resource": "arn:aws:ecr:ap-southeast-1:297416720645:repository/event-logger"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:TagRole"
+            ],
+            "Resource": "arn:aws:iam::297416720645:role/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:RequestTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:DeleteRole",
+                "iam:AttachRolePolicy"
+            ],
+            "Resource": "arn:aws:iam::297416720645:role/*",
+            "Condition": {
+                "StringLike": {
+                    "aws:ResourceTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:List*"
+            ],
+            "Resource": "arn:aws:iam::297416720645:role/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:CreateFunction",
+                "lambda:TagResource"
+            ],
+            "Resource": "arn:aws:lambda:ap-southeast-1:297416720645:function:*",
+            "Condition": {
+                "StringLike": {
+                    "aws:RequestTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:DeleteFunction",
+                "lambda:InvokeFunction"
+            ],
+            "Resource": "arn:aws:lambda:ap-southeast-1:297416720645:function:*",
+            "Condition": {
+                "StringLike": {
+                    "aws:ResourceTag/environment": ["dev"]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:GetFunction",
+                "lambda:List*"
+            ],
+            "Resource": "arn:aws:lambda:ap-southeast-1:297416720645:function:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:Passrole"
+            ],
+            "Resource": "arn:aws:iam::297416720645:role/*-lambda-execution"
         }
     ]
 }
