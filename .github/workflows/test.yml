@@ -1,4 +1,4 @@
-name: Run lint and some tests
+name: Run lint and Some tests
 
 on:
   push:
