@@ -66,7 +66,6 @@ where "id" is client supplied. "payload" can be any valid JSON object.
 - Lambda Function requires some values that need to be created first in Base environment module.
 
 <br>
----
 
 ### CI/CD
 
@@ -76,9 +75,14 @@ where "id" is client supplied. "payload" can be any valid JSON object.
 
 ### Build, Publish, Deploy and Test
 1. Build -> Builds a docker image which consolidates all the required libraries, the application source code
+```docker build -t $IMAGE_NAME:$IMAGE_TAG -f application/Dockerfile .
 2. Publish -> Pushes the docker image created to the ECR Repository
+``` docker tag $IMAGE_NAME:$IMAGE_TAG $ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$IMAGE_NAME:$IMAGE_TAG
+``` docker push $ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$IMAGE_NAME:$IMAGE_TAG
 3. Deploy -> Applies terraform module for Lambda function
 4. Test -> Post deployment tests to create and retrieve an event
 
 ** It uses the Git Cimmit Short SHA as Docker Image tag and Event ID for testing **
 
+
+### Future Considerations
