@@ -3,6 +3,11 @@ name: Run lint and Some tests
 on:
   push:
     branches-ignore: [ "main" ]
+  pull_request:
+    types:
+      - opened
+      - synchronize 
+      - reopened 
 
 env:
   REGION: ap-southeast-1
