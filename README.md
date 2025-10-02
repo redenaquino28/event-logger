@@ -48,4 +48,37 @@ where "id" is client supplied. "payload" can be any valid JSON object.
   <br>b. It provisions ECR repository where docker image for application API will be stored along with the policies
 
 
+<br>
+
+## Terraform
+
+<br>
+
+### We have 2 terraform modules
+1. env -> Base environment which consists of DynamoDB, ECR Repository and policies
+2. lambda -> The end product where application will be hosted and run
+
+<br>
+
+### Why separate Lambda Module to base environment?
+- DynamoDB and ECR hold valuable assets and data which are critical in terms loss or downtime. It's better to have them in a separate module so as to prevent a breaking change.
+- Lambda Function holds the application. Every change in the application source code, it must be updated. 
+- Lambda Function requires some values that need to be created first in Base environment module.
+
+<br>
+---
+
+### CI/CD
+
+### Lint and Terraform Validation
+- Every push to any branch except main branch triggers a workflow that runs tflint and validation to terraform modules
+<br>
+
+### Build, Publish, Deploy and Test
+1. Build -> Builds a docker image which consolidates all the required libraries, the application source code
+2. Publish -> Pushes the docker image created to the ECR Repository
+3. Deploy -> Applies terraform module for Lambda function
+4. Test -> Post deployment tests to create and retrieve an event
+
+** It uses the Git Cimmit Short SHA as Docker Image tag and Event ID for testing **
 
